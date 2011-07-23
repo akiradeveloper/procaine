@@ -1,3 +1,9 @@
+# This project is deprecated.
+Sorry, Proc#curry is already implemented in Ruby language.
+This project is fairly deprecated.
+
+
+
 # Procaine
 Curring for Proc.
 
@@ -17,7 +23,7 @@ With this Proc extension, your Ruby code will be more functional and therefore r
 p = Proc.new { |x,y,z| x**y+z }
 
 # currying
-q = p[2,3] #=> return a function equivalent to ->(x){ 2**3+x } .
+q = p.curry(2,3) #=> return a function equivalent to ->(x){ 2**3+x } .
 q.call(4) #=> 12
 
 # flipping
