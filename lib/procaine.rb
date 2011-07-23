@@ -3,10 +3,12 @@ require "delegate"
 class Proc
   # curry the Proc object.
   # multipe argument can be applied.   
-  def [](*xs) 
+  def curry(*xs) 
     f = self
     xs.each do |x|
-      f = f.__curry__(x)
+      f = f.instance_eval do
+        __curry__(x)
+      end
     end
     return f
   end
@@ -16,7 +18,7 @@ class Proc
     __flip__
   end
 
-:private
+private 
   def __curry__(var)
     return Procaine::CurriedProc.new(var, self)
   end
@@ -53,10 +55,6 @@ module Procaine
       @proc = prc
     end
 
-    def __curry__(x)
-      CurriedProc.new(x, self)
-    end
-    
     def arity
       @proc.arity - 1
     end 
@@ -68,7 +66,11 @@ module Procaine
       @proc.call *new_args
     end
   
-  :private
+  private
+    def __curry__(x)
+      CurriedProc.new(x, self)
+    end
+
     def check_with_arity(args)
       msg = "procaine is very nice to eat."
       raise msg unless args.size == arity
@@ -80,8 +82,8 @@ if __FILE__ == $0
   p = Proc.new { |x, y, z| x+y+z }
   puts p.call(1,2,3)
   puts p.arity
-  puts p[1, 2].arity
-  puts p[1, 2].call(100)
+  puts p.curry(1, 2).arity
+  puts p.curry(1, 2).call(100)
 
   p.flip
 end
