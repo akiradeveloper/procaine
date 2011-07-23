@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "procaine"
   gem.homepage = "http://github.com/akiradeveloper/procaine"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = "extension of Proc class"
+  gem.description = "Add more functionality to Proc class."
   gem.email = "ruby.wktk@gmail.com"
   gem.authors = ["Akira Hayakawa"]
   # dependencies defined in Gemfile
