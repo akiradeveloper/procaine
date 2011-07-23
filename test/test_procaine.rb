@@ -4,14 +4,21 @@ class TestProcaine < Test::Unit::TestCase
 
   should "currying ok" do
     p = Proc.new { |x, y| x + y }
-    q = p.__curry__(10)
+    q = p[10]
     assert_equal( 12, q.call(2) )
   end
+
+  should "curring ok 2" do
+    p = Proc.new { |x,y,z| x+y+z }
+    q = p[1,2]
+    assert_equal( 103, q.call(100) )
+  end
+    
 
   should "flipping ok" do
     p = Proc.new { |x, y| x ** y }
     assert_equal( 9, p.call(3, 2) )
-    q = p.__flip__
+    q = p.flip
     assert_equal( 8, q.call(3, 2) )
   end
 
@@ -29,18 +36,18 @@ class TestProcaine < Test::Unit::TestCase
     assert( 100, blk_helper(&p) )
 
     q = Proc.new { |x, y| x + y }
-    r = q.__curry__(10)
+    r = q[10]
     assert_equal( 20, blk_helper(&r) )
 
-    s = p.__flip__
+    s = p.flip
     assert_equal( 20, blk_helper(&r) )
   end
 
   should "arity correct" do
     p = Proc.new { |x, y| x + y }
     assert_equal( 2, p.arity )
-    assert_equal( 1, p.__curry__(10).arity )
-    assert_equal( 2, p.__flip__.arity )
+    assert_equal( 1, p[10].arity )
+    assert_equal( 2, p.flip.arity )
   end
 
 end

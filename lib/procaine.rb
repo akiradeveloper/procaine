@@ -1,6 +1,22 @@
 require "delegate"
 
 class Proc
+  # curry the Proc object.
+  # multipe argument can be applied.   
+  def [](*xs) 
+    f = self
+    xs.each do |x|
+      f = f.__curry__(x)
+    end
+    return f
+  end
+
+  # flip the first and the second argument
+  def flip
+    __flip__
+  end
+
+:private
   def __curry__(var)
     return Procaine::CurriedProc.new(var, self)
   end
@@ -8,9 +24,12 @@ class Proc
   def __flip__
     return Procaine::FlippedProc.new(self)
   end
+
 end
 
 module Procaine
+
+  # Note
   # document for both delegate classes.
   # if delegate do not suffice, use inheritence.
 
@@ -33,9 +52,13 @@ module Procaine
       @x = x
       @proc = prc
     end
+
+    def __curry__(x)
+      CurriedProc.new(x, self)
+    end
     
     def arity
-      return @proc.arity - 1
+      @proc.arity - 1
     end 
   
     def call(*args)
@@ -45,10 +68,21 @@ module Procaine
       @proc.call *new_args
     end
   
-    :private
+  :private
     def check_with_arity(args)
       msg = "procaine is very nice to eat."
       raise msg unless args.size == arity
     end
   end
 end # end of module Procaine
+
+if __FILE__ == $0
+  p = Proc.new { |x, y, z| x+y+z }
+  puts p.call(1,2,3)
+  puts p.arity
+  puts p[1, 2].arity
+  puts p[1, 2].call(100)
+
+  p.flip
+end
+ 
